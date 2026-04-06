@@ -10,21 +10,18 @@ class DocumentTemplate extends Model
     use HasFactory;
 
     protected $fillable = [
-        'variable_json',
-        'template_path',
-        'societe_id',
         'type_document_id',
+        'template_path',
+        'roles_autorises',
+        'variable_json',
     ];
 
     protected $casts = [
         'variable_json' => 'array',
+        'roles_autorises' => 'array',
     ];
 
     // Relations
-    public function societe()
-    {
-        return $this->belongsTo(Societe::class);
-    }
 
     public function typeDocument()
     {

@@ -15,21 +15,21 @@ export default function SalariesArchiveTab() {
   };
 
   const formatDate = (date) => {
-  if (!date) return "—";
+    if (!date) return "—";
 
-  return new Date(date).toLocaleString("fr-FR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
+    return new Date(date).toLocaleString("fr-FR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
 
   // Fetch archives from backend
   const fetchArchives = async (page = 1) => {
     try {
-      const res = await api.get("/salaries/archives",{
+      const res = await api.get("/salaries/archives", {
         params: {
           page,
           per_page: perPage,
@@ -99,85 +99,89 @@ export default function SalariesArchiveTab() {
 
   return (
     <>
-    <table className="w-full border">
-      <thead>
-        <tr className="bg-gray-100">
-          <th className="p-2 border">Photo</th>
-          <th className="p-2 border">CIN</th>
-          <th className="p-2 border">Nom</th>
-          <th className="p-2 border">Prénom</th>
-          <th className="p-2 border">Société</th>
-          <th className="p-2 border">Service</th>
-          <th className="border p-2">Statut</th>
-          <th className="border p-2">Archivé le</th>
-          <th className="p-2 border">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {salaries.map((s) => (
-          <tr key={s.id}>
-            <td className="p-2 border">
-              <img
-                src={s.photo ? backendURL + s.photo : profile}
-                onError={(e) => (e.target.src = profile)}
-                style={styles.photo}
-              />
-            </td>
-            <td className="p-2 border">{s.cin}</td>
-            <td className="p-2 border">{s.nom}</td>
-            <td className="p-2 border">{s.prenom}</td>
-            <td className="p-2 border">{s.societe?.nom ?? "-"}</td>
-            <td className="p-2 border">{s.service?.nom ?? "-"}</td>
-            <td className="border p-2">
-              <select
-                value={s.status}
-                onChange={(e) => updateStatus(s.id, e.target.value)}
-                className="border rounded px-2 py-1 text-sm"
-              >
-                <option value="archive">Archivé</option>
-                <option value="suspendu">Suspendu</option>
-                <option value="demissionne">Démissionné</option>
-                <option value="licencie">Licencié</option>
-              </select>
-            </td>
-
-            <td className="border p-2 text-center text-sm text-gray-600 italic">
-                  {formatDate(s.archived_at)}
-            </td>
-            <td className="p-2 border space-x-3">
-              <button className="text-green-600" onClick={() => restore(s.id)}>
-                Restaurer
-              </button>
-              <button className="text-red-600" onClick={() => forceDelete(s.id)}>
-                Supprimer définitivement
-              </button>
-            </td>
+      <table className="w-full border">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="p-2 border">Photo</th>
+            <th className="p-2 border">CIN</th>
+            <th className="p-2 border">Nom</th>
+            <th className="p-2 border">Prénom</th>
+            <th className="p-2 border">Téléphone</th>
+            <th className="p-2 border">Email</th>
+            <th className="p-2 border">Société</th>
+            <th className="p-2 border">Service</th>
+            <th className="border p-2">Statut</th>
+            <th className="border p-2">Archivé le</th>
+            <th className="p-2 border">Actions</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-    {/* Pgination */}
-    <div className="mt-4 flex justify-between items-center">
-      <button
-        className="btn btn-sm"
-        disabled={currentPage === 1}
-        onClick={() => setCurrentPage(p => p - 1)}
-      >
-        Précédent
-      </button>
+        </thead>
+        <tbody>
+          {salaries.map((s) => (
+            <tr key={s.id}>
+              <td className="p-2 border">
+                <img
+                  src={s.photo ? backendURL + s.photo : profile}
+                  onError={(e) => (e.target.src = profile)}
+                  style={styles.photo}
+                />
+              </td>
+              <td className="p-2 border">{s.cin}</td>
+              <td className="p-2 border">{s.nom}</td>
+              <td className="p-2 border">{s.prenom}</td>
+              <td className="p-2 border">{s.gsm}</td>
+              <td className="p-2 border">{s.email}</td>
+              <td className="p-2 border">{s.societe?.nom ?? "-"}</td>
+              <td className="p-2 border">{s.service?.nom ?? "-"}</td>
+              <td className="border p-2">
+                <select
+                  value={s.status}
+                  onChange={(e) => updateStatus(s.id, e.target.value)}
+                  className="border rounded px-2 py-1 text-sm"
+                >
+                  <option value="Archivé">Archivé</option>
+                  <option value="Suspendu">Suspendu</option>
+                  <option value="Démissionné">Démissionné</option>
+                  <option value="Licencié">Licencié</option>
+                </select>
+              </td>
 
-      <span className="text-sm text-gray-600">
-        Page {currentPage} / {lastPage}
-      </span>
+              <td className="border p-2 text-center text-sm text-gray-600 italic">
+                {formatDate(s.archived_at)}
+              </td>
+              <td className="p-2 border space-x-3">
+                <button className="text-green-600" onClick={() => restore(s.id)}>
+                  Restaurer
+                </button>
+                <button className="text-red-600" onClick={() => forceDelete(s.id)}>
+                  Supprimer définitivement
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {/* Pgination */}
+      <div className="mt-4 flex justify-between items-center">
+        <button
+          className="btn btn-sm"
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage(p => p - 1)}
+        >
+          Précédent
+        </button>
 
-      <button
-        className="btn btn-sm"
-        disabled={currentPage === lastPage}
-        onClick={() => setCurrentPage(p => p + 1)}
-      >
-        Suivant
-      </button>
-    </div>
+        <span className="text-sm text-gray-600">
+          Page {currentPage} / {lastPage}
+        </span>
+
+        <button
+          className="btn btn-sm"
+          disabled={currentPage === lastPage}
+          onClick={() => setCurrentPage(p => p + 1)}
+        >
+          Suivant
+        </button>
+      </div>
     </>
   );
 }

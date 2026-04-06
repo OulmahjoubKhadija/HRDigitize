@@ -302,7 +302,6 @@ export default function InternProfile() {
             setEditData({
               nom: stagiaire.nom,
               prenom: stagiaire.prenom,
-              cin: stagiaire.cin,
               sexe: stagiaire.sexe,
               telephone: stagiaire.telephone,
               adresse: stagiaire.adresse,
@@ -337,18 +336,12 @@ export default function InternProfile() {
                     onChange={e => handleChange("prenom", e.target.value)}
                   />
 
-                     <label>Email</label>
-                    <input
-                      type="email"
-                      value={editData.email || ""}
-                      onChange={e => handleChange("email", e.target.value)}
-                    /> 
-
-                  <label>CIN</label>
+                  <label>Email</label>
                   <input
-                    value={editData.cin || ""}
-                    onChange={e => handleChange("cin", e.target.value)}
-                  />
+                    type="email"
+                    value={editData.email || ""}
+                    onChange={e => handleChange("email", e.target.value)}
+                  /> 
 
                   <label>Sexe</label>
                   <select
@@ -356,20 +349,14 @@ export default function InternProfile() {
                     onChange={e => handleChange("sexe", e.target.value)}
                   >
                     <option value="">-- Sélectionner --</option>
-                    <option value="homme">Homme</option>
-                    <option value="femme">Femme</option>
+                    <option value="Monsieur">Homme</option>
+                    <option value="Madame">Femme</option>
                   </select>
 
                   <label>Téléphone</label>
                   <input
                     value={editData.telephone || ""}
                     onChange={e => handleChange("telephone", e.target.value)}
-                  />
-
-                  <label>Adresse</label>
-                  <input
-                    value={editData.adresse || ""}
-                    onChange={e => handleChange("adresse", e.target.value)}
                   />
 
                   <label>Filière</label>

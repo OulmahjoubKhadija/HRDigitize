@@ -35,18 +35,39 @@ class FirstRHUserSeeder extends Seeder
         //  Salarié RH
         $salarie = Salarie::create([
             'user_id' => null,
+
             'cin' => 'RH0001',
+            'cnss'=> '12332456',
             'nom' => 'RH',
             'prenom' => 'Admin',
-            'sexe' => 'homme',
+
+            'date_naissance' => '1990-01-01',
+            'sexe' => 'Monsieur',
+
             'email' => 'admin.rh@example.com',
-            'telephone' => '0600000000',
-            'poste' => 'Responsable RH',
-            'date_embauche' => now(),
+            'gsm' => '0600000000',
+            'adresse' => 'Siège social',
+
+            'etat' => 'CDI',
+            'profession' => 'Responsable RH',
+            'date_embauche' => '2015-02-03',
+            'salaire' => 15000.00,
+
+            'situation_familiale' => 'Célibataire',
+            'nbre_enfants' => 0,
+
+            'banque' => 'Attijariwafa Bank',
+            'adresse_agence' => 'Agence Centre Ville',
+            'rib' => 'MA6401151900000123456789012',
+
+            'cv' => null,
+            'photo' => null,
             'linkedin' => null,
             'github' => null,
+
             'role' => 'RH',
-            'status' => 'actif',
+            'status' => 'Actif',
+
             'societe_id' => $societe->id,
             'service_id' => $service->id,
         ]);

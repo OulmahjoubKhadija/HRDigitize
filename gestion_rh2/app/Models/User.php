@@ -48,12 +48,12 @@ class User extends Authenticatable implements CanResetPassword
 
     public function salarie()
     {
-        return $this->hasOne(Salarie::class);
+        return $this->hasOne(Salarie::class, 'user_id');
     }
 
     public function stagiaire()
     {
-        return $this->hasOne(Stagiaire::class);
+        return $this->hasOne(Stagiaire::class, 'user_id');
     }
 
 }

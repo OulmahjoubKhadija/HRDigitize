@@ -26,7 +26,7 @@ class SalarieResource extends JsonResource
             'photo'  => $this->photo ? asset('storage/' . ltrim($this->photo, '/')) : null,
             'prenom' => $this->prenom,
             'nom'    => $this->nom,
-            'poste'  => $this->poste,
+            'profession'  => $this->profession,
             'role'   => $this->role,
 
             'societe' => $this->societe ? [
@@ -45,9 +45,11 @@ class SalarieResource extends JsonResource
             'github'   => $this->when($isAuthenticated && $this->github, $this->github),
 
             // Owner OR RH
-            'telephone' => $this->when($isOwner || $isRH, $this->telephone),
+            'gsm'       => $this->when($isOwner || $isRH, $this->gsm),
             'adresse'   => $this->when($isOwner || $isRH, $this->adresse),
             'cin'       => $this->when($isOwner || $isRH, $this->cin),
+            'salaire'   => $this->when($isOwner || $isRH, $this->salaire),
+            'cnss'      => $this->when($isOwner || $isRH, $this->cnss),
             'cv'        => $this->when($isOwner || $isRH, $this->cv ?
                 asset('storage/' . ltrim($this->cv, '/')) : null
             ),
@@ -55,6 +57,12 @@ class SalarieResource extends JsonResource
             // RH only
             'date_embauche' => $this->when($isRH, $this->date_embauche),
             'status'        => $this->when($isRH, $this->status),
+            'etat'          => $this->when($isRH, $this->etat),
+            'banque'        => $this->when($isRH, $this->banque),
+            'adresse_agence'        => $this->when($isRH, $this->adresse_agence),
+            'rib'        => $this->when($isRH, $this->rib),
+            'situation_familiale'        => $this->when($isRH, $this->situation_familiale),
+            'nbre_enfants'        => $this->when($isRH, $this->nbre_enfants),
             'user' => $this->whenLoaded('user', [
                 'id'        => $this->user->id,
                 'is_active' => $this->user->is_active,
@@ -64,7 +72,6 @@ class SalarieResource extends JsonResource
             ]),
             'archived_at' => $this->user->archived_at ?? null,
             
-
         ];
     }
 

@@ -4,13 +4,23 @@ import { salarieService } from "../services/salarie.service";
 
 export default function EditSalarieModal({ salarie, onClose, updateSalarieInState }) {
   const [form, setForm] = useState({
-    poste: "",
+    profession: "",
     role: "",
     societe_id: "",
     service_id: "",
     status: "",
     date_embauche: "",
     cin:"",
+    adresse: "",
+    date_naissance: "",
+    gsm: "",
+    etat: "",
+    salaire: "",
+    situation_familiale: "",
+    nbre_enfants: "",
+    adresse_agence: "",
+    rib: "",
+    cnss: "",
   });
 
   const [societes, setSocietes] = useState([]);
@@ -40,13 +50,25 @@ export default function EditSalarieModal({ salarie, onClose, updateSalarieInStat
   useEffect(() => {
     if (salarie) {
       setForm({
-        poste: salarie.poste || "",
+        profession: salarie.profession || "",
         role: salarie.role || "",
         societe_id: salarie.societe_id || "",
         service_id: salarie.service_id || "",
         status: salarie.status || "",
         date_embauche: salarie.date_embauche || "",
+
         cin: salarie.cin || "",
+        adresse: salarie.adresse || "",
+        date_naissance: salarie.date_naissance || "",
+        gsm: salarie.gsm || "",
+        etat: salarie.etat || "",
+        salaire: salarie.salaire || "",
+        situation_familiale: salarie.situation_familiale || "",
+        nbre_enfants: salarie.nbre_enfants || "",
+        adresse_agence: salarie.adresse_agence || "",
+        rib: salarie.rib || "",
+        cnss: salarie.cnss || "",
+        banque: salarie.banque || "",
       });
     }
   }, [salarie]);
@@ -70,7 +92,27 @@ export default function EditSalarieModal({ salarie, onClose, updateSalarieInStat
       const currentValue = salarie[key] ?? null;
 
       // Only include fields RH can update
-      if (['poste','role','societe_id','service_id','status','date_embauche','cin'].includes(key)) {
+      if ([
+        'profession',
+        'role',
+        'societe_id',
+        'service_id',
+        'status',
+        'date_embauche',
+        'cin',
+        'adresse',
+        'date_naissance',
+        'gsm',
+        'etat',
+        'salaire',
+        'situation_familiale',
+        'nbre_enfants',
+        'banque',
+        'adresse_agence',
+        'rib',
+        'cnss'
+      ].includes(key))
+    {
 
         // Convert empty strings to null
         const valueToSend = formValue === "" ? null : formValue;
@@ -109,12 +151,12 @@ export default function EditSalarieModal({ salarie, onClose, updateSalarieInStat
       <div className="modal-box">
         <h2 className="text-xl font-bold mb-4">Modifier Salarié</h2>
 
-        <label>Poste</label>
+        <label>Profession</label>
         <input
-          name="poste"
-          value={form.poste || ""}
+          name="profession"
+          value={form.profession || ""}
           onChange={handleChange}
-          placeholder="Poste"
+          placeholder="Profession"
           className="input input-bordered w-full mb-2"
         />
 
@@ -132,6 +174,69 @@ export default function EditSalarieModal({ salarie, onClose, updateSalarieInStat
           value={form.cin || ""}
           onChange={handleChange}
           placeholder="CIN"
+          className="input input-bordered w-full mb-2"
+        />
+
+        <label>CNSS</label>
+        <input
+          name="cnss"
+          value={form.cnss || ""}
+          onChange={handleChange}
+          placeholder="CNSS"
+          className="input input-bordered w-full mb-2"
+        />
+
+        <label>Date de naissance</label>
+        <input type="date"
+        name="date_naissance"
+        value={form.date_naissance || ""}
+        onChange={handleChange}
+        className="input input-bordered w-full mb-2"
+        />
+
+        <label>N° de GSM </label>
+        <input type="text"
+        name="gsm"
+        value={form.gsm || ""}
+        onChange={handleChange}
+        className="input input-bordered w-full mb-2"
+        />
+
+        <label>Situation familiale</label>
+        <select  
+        name="situation_familiale"
+        value={form.situation_familiale || ""}
+        onChange={handleChange}
+        className="input input-bordered w-full mb-2"
+        >
+          <option value="Célibataire">Célibataire</option>
+          <option value="Marié(e)">Marié(e)</option>
+          <option value="Divorcé(e)">Divorcé(e)</option>
+          <option value="Veuf/Veuve">Veuf/Veuve</option>
+        </select>
+ 
+        <label>Nombre d'enfants </label>
+        <input type="number" 
+        name="nbre_enfants" min="0" step="1" 
+        value={form.nbre_enfants || ""}
+        onChange={handleChange}
+        className="input input-bordered w-full mb-2"
+        />
+
+        <label>Adresse</label>
+        <input type="text" 
+        name="adresse"
+        value={form.adresse || ""}
+        onChange={handleChange}
+        className="input input-bordered w-full mb-2"
+        />
+        
+        <label>Date d'embauche</label>
+        <input
+          type="date"
+          name="date_embauche"
+          value={form.date_embauche || ""}
+          onChange={handleChange}
           className="input input-bordered w-full mb-2"
         />
 
@@ -157,6 +262,43 @@ export default function EditSalarieModal({ salarie, onClose, updateSalarieInStat
           <option value="">Sélectionner un service</option>
           {services.map(s => <option key={s.id} value={s.id}>{s.nom}</option>)}
         </select>
+  
+        <label>Banque </label>
+        <input type="text"
+        name="banque"
+        value={form.banque || ""}
+        onChange={handleChange}
+        className="input input-bordered w-full mb-2"
+        />  
+
+        <label>Adresse d'agence </label>
+        <input type="text"
+        name="adresse_agence"
+        value={form.adresse_agence || ""}
+        onChange={handleChange}
+        className="input input-bordered w-full mb-2"
+        />
+
+        <label>RIB </label>
+        <input
+          type="text"
+          name="rib"
+          value={form.rib || ""}
+          onChange={handleChange}
+          className="input input-bordered w-full mb-2"
+        />
+
+        <label>Type de contrat</label>
+        <select
+          name="etat"
+          value={form.etat || ""}
+          onChange={handleChange}
+          className="input input-bordered w-full mb-2"
+        >
+            <option value="">Sélectionner une etat</option>
+            <option value="CDI">CDI</option>
+            <option value="ANAPEC">ANAPEC</option>
+        </select>
 
         <label>Status</label>
         <select
@@ -166,22 +308,13 @@ export default function EditSalarieModal({ salarie, onClose, updateSalarieInStat
           className="input input-bordered w-full mb-2"
         >
           <option value="">Sélectionner un statut</option>
-          <option value="actif">Actif</option>
-          <option value="en_conge">En congé</option>
-          <option value="suspendu">Suspendu</option>
-          <option value="demissionne">Démissioné</option>
-          <option value="archive">Archivé</option>
-          <option value="licencie">Licencié</option>
+          <option value="Actif">Actif</option>
+          <option value="En congé">En congé</option>
+          <option value="Suspendu">Suspendu</option>
+          <option value="Démissionné">Démissioné</option>
+          <option value="Archivé">Archivé</option>
+          <option value="Licencié">Licencié</option>
         </select>
-
-        <label>Date d'embauche</label>
-        <input
-          type="date"
-          name="date_embauche"
-          value={form.date_embauche || ""}
-          onChange={handleChange}
-          className="input input-bordered w-full mb-2"
-        />
 
         <div className="text-right mt-4">
           <button className="btn mr-2" onClick={onClose}>Annuler</button>

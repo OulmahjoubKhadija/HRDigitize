@@ -4,13 +4,25 @@ import "./EmployeeForm.css";
 
 export default function EmployeeForm() {
   const [formData, setFormData] = useState({
+    cin: "",
+    cnss: "",
     prenom: "",
     nom: "",
     email: "",
+    date_naissance: "",
+    adresse: "",
+    gsm: "",
+    etat: "",
+    salaire: "",
+    situation_familiale: "",
+    nbre_enfants: "",
+    banque: "",
+    adresse_agence: "",
+    rib: "",
     role: "SALARIE",
     societe_id: "",
     service_id: "",
-    poste: "",
+    profession: "",
     date_embauche: "",
   });
 
@@ -66,13 +78,25 @@ export default function EmployeeForm() {
 
     try {
       const employeeData = {
+        cin: formData.cin,
+        cnss: formData.cnss,
         prenom: formData.prenom,
         nom: formData.nom,
         email: formData.email,
+        date_naissance: formData.date_naissance || null,
+        adresse: formData.adresse || null,
+        gsm: formData.gsm || null,
+        etat: formData.etat || null,
+        salaire: formData.salaire || null,
+        situation_familiale: formData.situation_familiale || null,
+        nbre_enfants: formData.nbre_enfants || null,
+        banque: formData.banque,
+        adresse_agence: formData.adresse_agence || null,
+        rib: formData.rib || null,
         role: formData.role,
         societe_id: formData.societe_id,
         service_id: formData.service_id,
-        poste: formData.poste || null,
+        profession: formData.profession || null,
         date_embauche: formData.date_embauche || null,
       };
 
@@ -82,13 +106,25 @@ export default function EmployeeForm() {
 
       // Reset form
       setFormData({
+        cin: "",
+        cnss: "",
         prenom: "",
         nom: "",
         email: "",
+        date_naissance: "",
+        adresse: "",
+        gsm: "",
+        etat: "",
+        salaire: "",
+        situation_familiale: "",
+        nbre_enfants: "",
+        banque: "",
+        adresse_agence: "",
+        rib: "",
         role: "SALARIE",
         societe_id: "",
         service_id: "",
-        poste: "",
+        profession: "",
         date_embauche: "",
       });
       setServices([]);
@@ -154,7 +190,6 @@ export default function EmployeeForm() {
                 id="prenom"
                 type="text"
                 name="prenom"
-                placeholder="Prénom de l'employé"
                 value={formData.prenom}
                 onChange={handleChange}
                 required
@@ -168,7 +203,6 @@ export default function EmployeeForm() {
                 id="nom"
                 type="text"
                 name="nom"
-                placeholder="Nom de l'employé"
                 value={formData.nom}
                 onChange={handleChange}
                 required
@@ -182,13 +216,92 @@ export default function EmployeeForm() {
                 id="email"
                 type="email"
                 name="email"
-                placeholder="email@exemple.com"
                 value={formData.email}
                 onChange={handleChange}
                 required
               />
             </div>
 
+            {/* Cin */}
+            <div className="employee-input-group">
+              <label htmlFor="cin" className="employee-required-field">CIN</label>
+              <input
+                id="cin"
+                type="text"
+                name="cin"
+                value={formData.cin}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* CNSS */}
+            <div className="employee-input-group">
+              <label htmlFor="cnss" className="employee-required-field">CNSS</label>
+              <input
+                id="cnss"
+                type="text"
+                name="cnss"
+                value={formData.cnss}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* GSM */}
+            <div className="employee-input-group">
+              <label htmlFor="gsm"> N° de GSM </label>
+              <input
+                id="gsm"
+                type="text"
+                name="gsm"
+                value={formData.gsm}
+                onChange={handleChange}
+              />
+            </div>
+
+            {/* Date de naissance */}
+            <div className="employee-input-group">
+              <label htmlFor="date_naissance">Date de naissance</label>
+              <input
+                id="date_naissance"
+                type="date"
+                name="date_naissance"
+                value={formData.date_naissance}
+                onChange={handleChange}
+              />
+            </div>
+
+            {/* Situation familiale */}
+            <div className="employee-input-group">
+              <label htmlFor="situation_familiale">Situation familiale</label>
+              <select
+                id="situation_familiale"
+                name="situation_familiale"
+                value={formData.situation_familiale}
+                onChange={handleChange}
+                className="employee-role-select"
+              >
+                <option value="">--Selectioner une situation--</option>
+                <option value="Célibataire">Célibataire</option>
+                <option value="Marié(e)">Marié(e)</option>
+                <option value="Divorcé(e)">Divorcé(e)</option>
+                <option value="Veuf/Veuve">Veuf/Veuve</option>
+              </select>
+            </div>
+         
+            {/* Nombre d'enfants */}
+            <div className="employee-input-group">
+              <label htmlFor="nbre_enfants"> Nombre d'enfants </label>
+              <input
+                id="nbre_enfants"
+                type="number" min="0" step="1"
+                name="nbre_enfants"
+                value={formData.nbre_enfants}
+                onChange={handleChange}
+              />
+            </div>
+            
             {/* Role */}
             <div className="employee-input-group">
               <label htmlFor="role" className="employee-required-field">Rôle</label>
@@ -253,16 +366,16 @@ export default function EmployeeForm() {
                 )}
               </div>
 
-              {/* Poste */}
+              {/* profession */}
               <div className="employee-input-group">
-                <label htmlFor="poste">
-                  Poste <span className="employee-optional-field">(optionnel)</span>
+                <label htmlFor="profession">
+                  Profession 
                 </label>
                 <input
-                  id="poste"
+                  id="profession"
                   type="text"
-                  name="poste"
-                  value={formData.poste}
+                  name="profession"
+                  value={formData.profession}
                   onChange={handleChange}
                 />
               </div>
@@ -270,7 +383,7 @@ export default function EmployeeForm() {
               {/* Date d'embauche */}
               <div className="employee-input-group">
                 <label htmlFor="date_embauche">
-                  Date d'embauche <span className="employee-optional-field">(optionnel)</span>
+                  Date d'embauche
                 </label>
                 <input
                   id="date_embauche"
@@ -280,6 +393,71 @@ export default function EmployeeForm() {
                   onChange={handleChange}
                 />
               </div>
+
+            {/* Etat*/}
+            <div className="employee-input-group">
+              <label htmlFor="etat">Type de contrat </label>
+              <select
+                id="etat"
+                name="etat"
+                value={formData.etat}
+                onChange={handleChange}
+                className="employee-role-select"
+              >
+                <option value="">--Selectioner une etat--</option>
+                <option value="CDI">CDI</option>
+                <option value="ANAPEC">ANAPEC</option>
+              </select>
+            </div>
+
+            {/* Banque */}
+            <div className="employee-input-group">
+              <label htmlFor="banque"> Banque </label>
+              <input
+                id="banque"
+                type="text"
+                name="banque"
+                value={formData.banque}
+                onChange={handleChange}
+              />
+            </div> 
+
+            {/* Adresse d'agence */}
+            <div className="employee-input-group">
+              <label htmlFor="adresse_agence"> Adresse d'agence </label>
+              <input
+                id="adresse_agence"
+                type="text"
+                name="adresse_agence"
+                value={formData.adresse_agence}
+                onChange={handleChange}
+              />
+            </div>
+
+            {/* RIB */}
+            <div className="employee-input-group">
+              <label htmlFor="rib"> RIB </label>
+              <input
+                id="salaire"
+                type="text" 
+                name="rib"
+                value={formData.rib}
+                onChange={handleChange}
+              />
+            </div> 
+
+            {/* Salaire */}
+            <div className="employee-input-group">
+              <label htmlFor="salaire"> Salaire </label>
+              <input
+                id="salaire"
+                type="number" min="0" step="0.01"
+                name="salaire"
+                value={formData.salaire}
+                onChange={handleChange}
+              />
+            </div>
+
             </div>
           </div>
 

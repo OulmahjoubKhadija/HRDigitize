@@ -19,6 +19,12 @@ import CreateSociete from "./components/forms/CreateSociete.jsx";
 import CreateService from "./components/forms/CreateService.jsx";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Archives from "./pages/archives/Archives.jsx";
+import TypeDocumentsPage from "./pages/TypeDocuments/TypeDocumentsPage.jsx";
+import DocumentTemplatesPage from "./pages/DocumentTemplates/DocumentTemplatesPage.jsx";
+import DemandeTable from "./pages/demandes/tabs/DemandeTable.jsx";
+import MesDemandesPage from "./pages/demandes/MesDemandesPage.jsx";
+import GenerateDocumentPage from "./pages/generation/GenerateDocumentPage.jsx";
+// import GenerateForUserPage from "./pages/generation/GenerateForUserPage.jsx";
 
 function App() {
   return (
@@ -120,6 +126,54 @@ function App() {
               </RoleGuard>
             }
           />
+
+          <Route
+            path="/type-documents"
+            element={
+              <RoleGuard roles={["RH"]}>
+                <TypeDocumentsPage />
+              </RoleGuard>
+            }
+          />
+
+          <Route
+            path="/document-templates"
+            element={
+              <RoleGuard roles={["RH"]}>
+                <DocumentTemplatesPage />
+              </RoleGuard>
+            }
+          />
+          <Route
+            path="/demandes"
+            element={
+              <RoleGuard roles={["RH"]}>
+                <DemandeTable />
+              </RoleGuard>
+            }
+            >
+          </Route>
+
+          <Route
+            path="/mes-demandes"
+            element={
+              <RoleGuard roles={["RH", "SALARIE", "CHEF_SERVICE", "STAGIAIRE"]}>
+                <MesDemandesPage />
+              </RoleGuard>
+            }
+            >
+          </Route>
+
+          <Route
+            path="/generate-document"
+            element={
+              <RoleGuard roles={["RH","SALARIE", "CHEF_SERVICE"]}>
+                <GenerateDocumentPage />
+              </RoleGuard>
+            }
+            >
+          </Route>
+
 
         </Routes>
 

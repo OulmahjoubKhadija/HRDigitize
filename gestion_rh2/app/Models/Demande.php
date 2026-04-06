@@ -12,37 +12,29 @@ class Demande extends Model
     protected $table = 'demandes';
 
     protected $fillable = [
-        'demandeur_id',
-        'demandeur_type',
+        'user_id',             
         'type_document_id',
-        'cible_id',
-        'cible_type',
-        'status',
-        'format',
+        'variables_json',      
+        'file_path',           
+        'status',              
         'date_demande',
         'date_validation',
         'commentaire_rh',
     ];
 
     protected $casts = [
+        'variables_json' => 'array',
         'date_demande' => 'date',
         'date_validation' => 'date',
     ];
 
-    public function demandeur(){
-        return $this->morphTo();
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 
-    public function cible()
-    {
-        return $this->morphTo();
-    }
 
     public function typeDocument(){
         return $this-> belongsTo(TypeDocument::class);
     }
 
-    public function documentGener(){
-        return $this->hasOne(DocumentGenere::class);
-    }
 }

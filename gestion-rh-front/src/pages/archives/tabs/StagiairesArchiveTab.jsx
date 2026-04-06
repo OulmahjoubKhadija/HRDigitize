@@ -129,8 +129,8 @@ export default function StagiairesArchiveTab() {
             <td className="p-2 border">{s.societe?.nom ?? "-"}</td>
             <td className="p-2 border">{s.service?.nom ?? "-"}</td>
             <td className="p-2 border">{s.encadrant ? `${s.encadrant.nom} ${s.encadrant.prenom}` : "-"}</td>
-            <td className="p-2 border">{s.filier?? "-"}</td>
-            <td className="p-2 border">{s.telephon?? "-"}</td>
+            <td className="p-2 border">{s.filiere ??"-"}</td>
+            <td className="p-2 border">{s.telephone ?? "-"}</td>
             <td className="p-2 border">{s.email}</td>
             <td className="p-2 border">{formatDate(s.date_debut)}</td>
             <td className="p-2 border">{formatDate(s.date_fin)}</td>
@@ -140,9 +140,9 @@ export default function StagiairesArchiveTab() {
                 onChange={(e) => updateStatus(s.id, e.target.value)}
                 className="border rounded px-2 py-1 text-sm"
               >
-                <option value="archive">Archivé</option>
-                <option value="fin-stage">Fin de stage</option>
-                <option value="interrompu">Interrompu</option>
+                <option value="Archivé">Archivé</option>
+                <option value="Fin de stage">Fin de stage</option>
+                <option value="Interrompu">Interrompu</option>
               </select>
             </td>
             <td className="border p-2 text-center text-sm text-gray-600 italic">

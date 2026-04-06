@@ -18,15 +18,25 @@ class Salarie extends Model
     protected $fillable = [
         'user_id',
         'cin',
+        'cnss',
         'nom',
         'prenom',
+        'date_naissance',
+        'gsm',
+        'etat',
+        'salaire',
+        'situation_familiale',
+        'nbre_enfants',
+        'banque',
+        'adresse_agence',
+        'rib',        
         'sexe',
         'cv',
         'photo',
         'adresse',
         'email',
-        'telephone',
-        'poste',
+        'gsm',
+        'profession',
         'date_embauche',
         'linkedin',
         'github',
@@ -38,11 +48,11 @@ class Salarie extends Model
 
     
     public function societe(){
-        return $this->belongsTo(Societe::class)->withDefault();
+        return $this->belongsTo(Societe::class, 'societe_id')->withDefault();
     }
 
     public function service(){
-        return $this->belongsTo(Service::class)->withDefault();
+        return $this->belongsTo(Service::class, 'service_id')->withDefault();
     }
 
     public function demandes(){

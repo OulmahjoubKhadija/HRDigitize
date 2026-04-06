@@ -24,7 +24,6 @@ class Stagiaire extends Model
         'photo',
         'email',
         'telephone',
-        'adresse',
         'filiere',
         'cv',
         'demande_stage',
@@ -39,13 +38,6 @@ class Stagiaire extends Model
         'encadrant_id',
     ];
 
-    
-    protected $casts = [
-        'is_active' => 'boolean',
-        'is_archived' => 'boolean',
-    ];
-
-
     public function stagiaireUser()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -53,12 +45,12 @@ class Stagiaire extends Model
 
     public function societe()
     {
-        return $this->belongsTo(Societe::class)->withDefault();
+        return $this->belongsTo(Societe::class, 'societe_id')->withDefault();
     }
 
     public function service()
     {
-        return $this->belongsTo(Service::class)->withDefault();
+        return $this->belongsTo(Service::class, 'service_id')->withDefault();
     }
 
     public function encadrant()

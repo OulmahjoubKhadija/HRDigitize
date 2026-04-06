@@ -41,18 +41,20 @@ export default function ViewSalarieModal({ salarie, onClose }) {
 
           <div>
             {salarie.cin &&(<p><strong>CIN :</strong> {salarie.cin}</p>)}
+            {salarie.cin &&(<p><strong>CNSS:</strong> {salarie.cnss}</p>)}
             <p><strong>Nom :</strong> {salarie.nom ?? "-"}</p>
             <p><strong>Prénom :</strong> {salarie.prenom ?? "-"}</p>
             <p><strong>Rôle :</strong> {salarie.role ?? "-"}</p>
-            {salarie.poste &&(<p><strong>Poste :</strong> {salarie.poste ?? "-"}</p>)}
+            {salarie.profession  &&(<p><strong>Profession :</strong> {salarie.profession ?? "-"}</p>)}
             <p><strong>Société :</strong> {salarie.societe?.nom ?? "-"}</p>
             <p><strong>Service :</strong> {salarie.service?.nom ?? "-"}</p>
+            {salarie.salaire && (<p><strong>Salaire :</strong>{salarie.salaire}</p>)}
           </div>
         </div>
 
         {/* Common info for all logged-in users */}
         <p><strong>Email :</strong> {salarie.email ?? "-"}</p>
-        {salarie.telephone &&(<p><strong>Téléphone :</strong> {salarie.telephone}</p>)}
+        {salarie.gsm &&(<p><strong>Téléphone :</strong> {salarie.gsm}</p>)}
         {salarie.adresse &&(<p><strong>Adresse :</strong> {salarie.adresse}</p>)}
         {salarie.linkedin &&(<p><strong>LinkedIn :</strong> {salarie.linkedin}</p>)}
         {salarie.github && (<p><strong>GitHub :</strong> {salarie.github}</p>)}
@@ -71,6 +73,13 @@ export default function ViewSalarieModal({ salarie, onClose }) {
           <>
             <p><strong>Date embauche :</strong> {salarie.date_embauche ?? "-"}</p>
             <p><strong>Status :</strong> {salarie.status ?? "-"}</p>
+            <p><strong>Etat(Type de contrat):</strong> {salarie.etat ?? "-"}</p>
+            <p><strong>Banque :</strong> {salarie.banque ?? "-"}</p>
+            <p><strong>Adresse d'agence :</strong> {salarie.adresse_agence ?? "-"}</p>
+            <p><strong>RIB :</strong> {salarie.rib ?? "-"}</p>
+            <p><strong>Situation_familiale :</strong> {salarie.situation_familiale ?? "-"}</p>
+            {salarie.nbre_enfants && (<p><strong>Nombre d'enfants :</strong>{salarie.nbre_enfants}</p>)}
+            
           </>
         )}
 

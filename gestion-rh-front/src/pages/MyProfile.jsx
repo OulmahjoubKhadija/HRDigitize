@@ -2,10 +2,16 @@ import { useState, useEffect } from "react";
 import api from "../api/axios";
 import "./MyProfile.css";
 import { 
-  FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaIdCard, 
-  FaBuilding, FaUserShield, FaLinkedin, FaGithub, FaFileAlt, FaCamera 
+  FaUniversity,FaPhone, FaMapMarkerAlt, FaIdCard,FaEnvelope,
+  FaBuilding, FaUserShield, FaLinkedin, FaGithub, FaFileAlt, FaCamera, 
+  FaMoneyBillWave,
+  FaCreditCard,
+  FaUserFriends,
+  FaBaby,
+  FaBirthdayCake
 } from "react-icons/fa";
 import profile from "../assets/profile.webp";
+import { HiOutlineDocumentText } from "react-icons/hi";
 
 export default function MyProfile() {
   const [salarie, setSalarie] = useState(null);
@@ -215,10 +221,10 @@ const handlePhotoUpload = async (file) => {
               <label>Service</label>
             </div>
           )}
-          {salarie.poste && (
+          {salarie.profession && (
             <div className="profile-detail-item">
-              <p className="profile-poste">{salarie.poste}</p>
-              <label>Poste</label>
+              <p className="profile-poste">{salarie.profession}</p>
+              <label>Profession</label>
             </div>
           )}
         </div>
@@ -230,10 +236,10 @@ const handlePhotoUpload = async (file) => {
               <span>{salarie.email}</span>
             </div>
           )}
-          {salarie.telephone && (
+          {salarie.gsm && (
             <div className="profile-info-item">
               <FaPhone className="icon" />
-              <span>{salarie.telephone}</span>
+              <span>{salarie.gsm}</span>
             </div>
           )}
           {salarie.adresse && (
@@ -246,6 +252,18 @@ const handlePhotoUpload = async (file) => {
             <div className="profile-info-item">
               <FaIdCard className="icon" />
               <span>{salarie.cin}</span>
+            </div>
+          )}
+          {salarie.date_naissance && (
+            <div className="profile-info-item">
+              <FaBirthdayCake className="icon" />
+              <span>{salarie.date_naissance}</span>
+            </div>
+          )}
+          {salarie.salaire && (
+            <div className="profile-info-item">
+              <FaMoneyBillWave className="icon" />
+              <span>{salarie.salaire}</span>
             </div>
           )}
           {salarie.linkedin && (
@@ -287,18 +305,87 @@ const handlePhotoUpload = async (file) => {
               <div className="profile-more-info">
                 
                 {salarie.date_embauche && (
+                  <>
+                  <label className="profile-societe">Date d'embauche</label>
                   <div className="profile-info-item">
                     <FaBuilding className="icon" />
                     <span>{salarie.date_embauche}</span>
                   </div>
+                  </>
                 )}
                 {salarie.status && (
+                  <>
+                  <label className="profile-societe">Statut</label>
                   <div className="profile-info-item">
                     <FaUserShield className="icon" />
                     <span>{salarie.status}</span>
                   </div>
+                  </>
+                )}
+                {salarie.etat && (
+                  <>
+                  <label className="profile-societe">Type de contrat</label>
+                  <div className="profile-info-item">
+                    <HiOutlineDocumentText className="icon" />
+                    <span>{salarie.etat}</span>
+                  </div>
+                  </>
+                )}
+                {salarie.cnss && (
+                  <>
+                  <label className="profile-societe">CNSS</label>
+                  <div className="profile-info-item">
+                    <FaUserShield className="icon" />
+                    <span>{salarie.cnss}</span>
+                  </div>
+                  </>
+                )}
+                {salarie.banque && (
+                  <>
+                  <label className="profile-societe">Banque</label>
+                  <div className="profile-info-item">
+                    <FaUniversity className="icon" />
+                    <span>{salarie.banque}</span>
+                  </div>
+                  </>
+                )}
+                {salarie.adresse_agence && (
+                  <>
+                  <label className="profile-societe">Adresse d'agence</label>
+                  <div className="profile-info-item">
+                    <FaMapMarkerAlt className="icon" />
+                    <span>{salarie.adresse_agence}</span>
+                  </div>
+                  </>
+                )}
+                {salarie.rib && (
+                  <>
+                  <label className="profile-societe">RIB</label>
+                  <div className="profile-info-item">
+                    <FaCreditCard className="icon" />
+                    <span>{salarie.rib}</span>
+                  </div></>
+                )}
+                {salarie.situation_familiale && (
+                  <>
+                  <label className="profile-societe">Situation familiale</label>
+                  <div className="profile-info-item">
+                    <FaUserFriends className="icon" />
+                    <span>{salarie.situation_familiale}</span>
+                  </div>
+                  </>
+                )}
+                {salarie.nbre_enfants && (
+                  <>
+                  <label className="profile-societe">Nombre d'enfants</label>
+                  <div className="profile-info-item">
+                    <FaBaby className="icon" />
+                    <span>{salarie.nbre_enfants}</span>
+                  </div>
+                  </>
                 )}
               </div>
+
             )}
           </>
         )}
@@ -314,18 +401,27 @@ const handlePhotoUpload = async (file) => {
         prenom: salarie.prenom,
         nom: salarie.nom,
         email: salarie.email,
-        telephone: salarie.telephone,
+        gsm:salarie.gsm,
         adresse: salarie.adresse,
         linkedin: salarie.linkedin,
         github: salarie.github,
-        cin: salarie.cin,
         sexe: salarie.sexe,
         // RH fields
+        cin: salarie.cin,
         date_embauche: salarie.date_embauche,
         status: salarie.status,
         societe_id: salarie.societe_id,
         service_id: salarie.service_id,
-        poste: salarie.poste,
+        profession: salarie.profession,
+        date_naissance: salarie.date_naissance,
+        etat: salarie.date_naissance,
+        salaire: salarie.salaire,
+        situation_familiale: salarie.situation_familiale,
+        nbre_enfants: salarie.nbre_enfants,
+        banque: salarie.banque,
+        adresse_agance: salarie.adresse_agance,
+        rib: salarie.rib,
+        cnss: salarie.cnss,
 
       });
       setOriginalEmail(salarie.email);
@@ -372,8 +468,8 @@ const handlePhotoUpload = async (file) => {
             <div className="edit-input-group">
               <label>Téléphone</label>
               <input
-                value={editData.telephone || ""}
-                onChange={(e) => handleChange("telephone", e.target.value)}
+                value={editData.gsm ||""}
+                onChange={(e) => handleChange("gsm", e.target.value)}
               />
             </div>
 
@@ -386,12 +482,30 @@ const handlePhotoUpload = async (file) => {
             </div>
 
             <div className="edit-input-group">
-              <label>CIN</label>
-                <input
-                  value={editData.cin || ""}
-                  onChange={(e) => handleChange("cin", e.target.value)}
-                />
-            </div>
+                <label>Status</label>
+                <select
+                  value={editData.status || ""}
+                  onChange={(e) => handleChange("status", e.target.value)}
+                  className="status-select"
+                >
+                  <option value="">-- Sélectionner --</option>
+                  <option value="Actif">Actif</option>
+                  <option value="En congé">En congé</option>
+                  <option value="Suspendu">Suspendu</option>
+                  <option value="Démissionné">Démissionné</option>
+                  <option value="Archivé">Archivé</option>
+                  <option value="Licencié">Licencié</option>
+                </select>
+              </div>
+
+              <div className="edit-input-group">
+                <label>CIN</label>
+                  <input
+                    value={editData.cin || ""}
+                    onChange={(e) => handleChange("cin", e.target.value)}
+                  />
+              </div>
+
           </div>
 
           {/* COLUMN 2 - Social & Files */}
@@ -404,8 +518,8 @@ const handlePhotoUpload = async (file) => {
                 onChange={e => handleChange("sexe", e.target.value)}
               >
                 <option value="">-- Sélectionner --</option>
-                <option value="homme">Homme</option>
-                <option value="femme">Femme</option>
+                <option value="Monsieur">Homme</option>
+                <option value="Madame">Femme</option>
               </select>
 
               <label>LinkedIn</label>
@@ -472,12 +586,21 @@ const handlePhotoUpload = async (file) => {
                   className="status-select"
                 >
                   <option value="">-- Sélectionner --</option>
-                  <option value="actif">Actif</option>
-                  <option value="en_conge">En congé</option>
-                  <option value="suspendu">Suspendu</option>
-                  <option value="demissionne">Démissionné</option>
-                  <option value="archive">Archivé</option>
+                  <option value="Actif">Actif</option>
+                  <option value="En congé">En congé</option>
+                  <option value="Suspendu">Suspendu</option>
+                  <option value="Démissionné">Démissionné</option>
+                  <option value="Archivé">Archivé</option>
+                  <option value="Licencié">Licencié</option>
                 </select>
+              </div>
+
+              <div className="edit-input-group">
+                <label>CIN</label>
+                  <input
+                    value={editData.cin || ""}
+                    onChange={(e) => handleChange("cin", e.target.value)}
+                  />
               </div>
 
               <div className="edit-input-group">
@@ -519,14 +642,89 @@ const handlePhotoUpload = async (file) => {
               </div>
 
               <div className="edit-input-group">
-                <label>Poste</label>
+                <label>Profession</label>
                 <input
-                  value={editData.poste || ""}
-                  onChange={(e) => handleChange("poste", e.target.value)}
-                  placeholder="Ex: Développeur Full-Stack"
+                  value={editData.profession || ""}
+                  onChange={(e) => handleChange("profession", e.target.value)}
                 />
               </div>
+              
+            <div className="edit-input-group">
+              <label>Date de naissance</label>
+                <input
+                  value={editData.date_naissance || ""}
+                  onChange={(e) => handleChange("date_naissance", e.target.value)}
+                />
             </div>
+
+            <div className="edit-input-group">
+              <label>etat</label>
+                <input
+                  value={editData.etat || ""}
+                  onChange={(e) => handleChange("etat", e.target.value)}
+                />
+            </div>
+            <div className="edit-input-group">
+              <label>Salaire</label>
+                <input
+                  value={editData.salaire || ""}
+                  onChange={(e) => handleChange("salaire", e.target.value)}
+                />
+            </div>
+
+             <div className="edit-input-group">
+                <label>Situation familiale</label>
+                <select
+                  value={editData.status || ""}
+                  onChange={(e) => handleChange("situation_familiale", e.target.value)}
+                  className="status-select"
+                >
+                  <option value="">-- Sélectionner --</option>
+                  <option value="Célibataire">Célibataire</option>
+                  <option value="Marié(e)">Marié(e)</option>
+                  <option value="Divorcé(e)">Divorcé(e)</option>
+                  <option value="Veuf/Veuve">Veuf/Veuve</option>
+                </select>
+              </div>
+
+            <div className="edit-input-group">
+              <label>Nombre d'enfants</label>
+                <input
+                  value={editData.nbre_enfants || ""}
+                  onChange={(e) => handleChange("nbre_enfants", e.target.value)}
+                />
+            </div>
+            <div className="edit-input-group">
+              <label>Banque</label>
+                <input
+                  value={editData.banque || ""}
+                  onChange={(e) => handleChange("banque", e.target.value)}
+                />
+            </div>
+            <div className="edit-input-group">
+              <label>Adresse d'agence</label>
+                <input
+                  value={editData.adresse_agance || ""}
+                  onChange={(e) => handleChange("adresse_agance", e.target.value)}
+                />
+            </div>
+            <div className="edit-input-group">
+              <label>RIB</label>
+                <input
+                  value={editData.rib || ""}
+                  onChange={(e) => handleChange("rib", e.target.value)}
+                />
+            </div>
+
+            <div className="edit-input-group">
+              <label>CNSS</label>
+                <input
+                  value={editData.cnss || ""}
+                  onChange={(e) => handleChange("cnss", e.target.value)}
+                />
+            </div>
+            
+          </div>
           )}
         </div>
       </div>

@@ -46,7 +46,17 @@ class SalarieController extends Controller
 
 
         // Validation: RH phase (minimal required data)
+
+        $request->merge([
+            'nbre_enfants' => $request->nbre_enfants === ''
+                ? 0
+                : $request->nbre_enfants
+        ]);
+
+
         $validated = $request->validate([
+            'cin'        => 'required|string|max:20',
+            'cnss'       => 'required|string|max:20',
             'nom'        => 'required|string|max:255',
             'prenom'     => 'required|string|max:255',
             'email'      => 'required|email|unique:salarie,email',
@@ -55,8 +65,18 @@ class SalarieController extends Controller
             'service_id' => 'required|exists:service,id',
 
             // Optional at creation (RH may or may not fill)
-            'poste'         => 'nullable|string|max:255',
-            'date_embauche' => 'nullable|date',
+            'profession'          => 'nullable|string|max:255',
+            'date_embauche'       => 'nullable|date',
+            'date_naissance'      => 'nullable|date|before:today',
+            'gsm'                 => 'nullable|string|max:20|regex:/^[0-9+\s\-]+$/',
+            'etat'                => 'nullable|in:CDI,ANAPEC',
+            'salaire'             => 'nullable|numeric|min:0',
+            'situation_familiale' => 'nullable|in:Célibataire,Marié(e),Divorcé(e),Veuf/Veuve',
+            'nbre_enfants'        => 'nullable|integer|min:0',
+            'banque'              => 'nullable|string|max:255',
+            'adresse_agence'      => 'nullable|string|max:255',
+            'rib'                 => 'nullable|string|max:34',
+            'adresse'             => 'nullable|string|max:500',            
         ]);
 
         // Default & deferred fields (filled later by the user)
@@ -65,11 +85,9 @@ class SalarieController extends Controller
             'sexe'      => null,
             'cv'        => null,
             'photo'     => null,
-            'adresse'   => null,
-            'telephone' => null,
             'linkedin'  => null,
             'github'    => null,
-            'status'    => 'actif',
+            'status'    => 'Actif',
         ]);
 
         DB::beginTransaction();
@@ -209,14 +227,31 @@ class SalarieController extends Controller
             ], 403);
         }
 
+        $request->merge([
+            'nbre_enfants' => $request->nbre_enfants === ''
+                ? 0
+                : $request->nbre_enfants
+        ]);
+
         $validated = $request->validate([
-            'poste'         => 'sometimes|string|max:255',
-            'role'          => 'sometimes|in:RH,SALARIE,CHEF_SERVICE',
-            'societe_id'    => 'sometimes|exists:societe,id',
-            'service_id'    => 'sometimes|exists:service,id',
-            'date_embauche' => 'sometimes|date',
-            'cin'           => 'sometimes|nullable|string|max:20',
-            'status'        => 'sometimes|in:actif,en_conge,suspendu,demissionne,archive,licencie',
+            'profession'          => 'sometimes|string|max:255',
+            'role'                => 'sometimes|in:RH,SALARIE,CHEF_SERVICE',
+            'societe_id'          => 'sometimes|exists:societe,id',
+            'service_id'          => 'sometimes|exists:service,id',
+            'date_embauche'       => 'sometimes|date',
+            'cin'                 => 'sometimes|nullable|string|max:20',
+            'cnss'                => 'sometimes|nullable|string|max:20',
+            'adresse'             => 'sometimes|nullable|string|max:255',
+            'date_naissance'      => 'sometimes|nullable|date|before:today',
+            'gsm'                 => 'sometimes|nullable|string|max:20|regex:/^[0-9+\s\-]+$/',
+            'etat'                => 'sometimes|in:CDI,ANAPEC',
+            'salaire'             => 'sometimes|nullable|numeric|min:0',
+            'situation_familiale' => 'sometimes|nullable|in:Célibataire,Marié(e),Divorcé(e),Veuf/Veuve',
+            'nbre_enfants'        => 'sometimes|nullable|integer|min:0',
+            'banque'              => 'sometimes|nullable|string|max:255',
+            'adresse_agence'      => 'sometimes|nullable|string|max:255',
+            'rib'                 => 'sometimes|nullable|string|max:34',
+            'status'              => 'sometimes|in:Actif,En congé,Démissionné,Archivé,Suspendu,Licencié',
         ]);
 
         if (empty($validated)) {
@@ -243,49 +278,49 @@ class SalarieController extends Controller
        SOFT DELETE (deactivate the SALARIE account BY THE RH ONLY)
     ============================================================== */
     public function destroy(Salarie $salarie)
-{
-    $this->authorize('delete', $salarie);
+    {
+        $this->authorize('delete', $salarie);
 
-    $user = $salarie->user;
+        $user = $salarie->user;
 
-    if (!$user) {
+        if (!$user) {
+            return response()->json([
+                'message' => 'Aucun compte utilisateur associé à ce salarié.'
+            ], 404);
+        }
+
+        if ($user->is_archived) {
+            return response()->json([
+                'message' => 'Ce salarié est déjà archivé.'
+            ], 400);
+        }
+
+        //prevent archiving active encadrant
+        $isActiveEncadrant = Stagiaire::where('encadrant_id', $salarie->id)
+            ->whereIn('user_id', function ($query) {
+                $query->select('id')
+                    ->from('users')
+                    ->where('is_active', true);
+            })
+            ->exists();
+
+        if ($isActiveEncadrant) {
+            return response()->json([
+                'message' => 'Impossible d’archiver ce salarié : il est encore encadrant d’un ou plusieurs stagiaires actifs.'
+            ], 409); 
+        }
+
+        //Archive instead of delete
+        $user->update([
+            'is_archived' => true,
+            'archived_at' => now(),
+            'is_active' => false
+        ]);
+
         return response()->json([
-            'message' => 'Aucun compte utilisateur associé à ce salarié.'
-        ], 404);
+            'message' => 'Salarié archivé avec succès.'
+        ]);
     }
-
-    if ($user->is_archived) {
-        return response()->json([
-            'message' => 'Ce salarié est déjà archivé.'
-        ], 400);
-    }
-
-    //prevent archiving active encadrant
-    $isActiveEncadrant = Stagiaire::where('encadrant_id', $salarie->id)
-        ->whereIn('user_id', function ($query) {
-            $query->select('id')
-                ->from('users')
-                ->where('is_active', true);
-        })
-        ->exists();
-
-    if ($isActiveEncadrant) {
-        return response()->json([
-            'message' => 'Impossible d’archiver ce salarié : il est encore encadrant d’un ou plusieurs stagiaires actifs.'
-        ], 409); 
-    }
-
-    //Archive instead of delete
-    $user->update([
-        'is_archived' => true,
-        'archived_at' => now(),
-        'is_active' => false
-    ]);
-
-    return response()->json([
-        'message' => 'Salarié archivé avec succès.'
-    ]);
-}
 
     /* ============================
        ARCHIVE THE DELETED SALARIE
@@ -378,7 +413,7 @@ class SalarieController extends Controller
          $this->authorize('update', $salarie);
 
          $request->validate([
-             'status' => 'required|in:suspendu,demissionne,archive,licencie',
+             'status' => 'required|in:Suspendu,Démissionné,Archivé,Licencié',
          ]);
 
          $salarie->update([
@@ -397,6 +432,7 @@ class SalarieController extends Controller
     ========================== */
    public function completeProfile(Request $request)
     {
+
         $user = $request->user(); 
 
         if (!$user) {
@@ -405,24 +441,30 @@ class SalarieController extends Controller
 
         $salarie = $user->salarie;
 
+        Log::info('completeProfile method hit!', [
+            'user_id' => $request->user()?->id
+        ]);
+
         if (!$salarie) {
             return response()->json([
                 'message' => 'Aucun profil salarié associé',
                 'user_id'=>$user->id,
             ], 404);
-        Log::info('Completing profile for', ['salarie_id'=>$salarie->id]);
         }
+
+        Log::info('Completing profile attempt', [
+            'user_id' => $user->id,
+            'salarie_id' => $salarie->id
+        ]);
+
 
         $this->authorize('update', $salarie);
 
         // Validation
         $validator = Validator::make($request->all(), [
-            'cin'       => 'required|string|max:20',
-            'sexe'      => 'required|in:homme,femme',
-            'adresse'   => 'required|string|max:255',
+            'sexe'      => 'nullable|in:Monsieur,Madame',
             'cv'        => 'nullable|file|mimes:pdf,doc,docx|max:2048',
             'photo'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'telephone' => 'required|string|max:20',
             'linkedin'  => 'nullable|string',
             'github'    => 'nullable|string',
         ]);
@@ -492,24 +534,34 @@ class SalarieController extends Controller
         $rules = [
             'nom'       => 'sometimes|nullable|string|max:100',
             'prenom'    => 'sometimes|nullable|string|max:100',
-            'sexe' => 'sometimes|nullable|in:homme,femme',
+            'sexe'      => 'sometimes|nullable|in:Monsieur,Madame',
             'email'     => 'sometimes|nullable|email|max:255|unique:users,email,' . $user->id,
-            'telephone' => 'sometimes|nullable|string|max:20',
+            'gsm'       => 'sometimes|nullable|string|max:20',
             'adresse'   => 'sometimes|nullable|string|max:255',
             'linkedin'  => 'sometimes|nullable|url|max:255',
             'github'    => 'sometimes|nullable|url|max:255',
             'photo'     => 'sometimes|nullable|file|image|max:2048',
             'cv'        => 'sometimes|nullable|file|mimes:pdf,doc,docx|max:2048',
-            'cin'       => 'sometimes|nullable|string|max:20',
         ];
 
         if ($user->role === 'RH') {
             $rules += [
                 'date_embauche' => 'sometimes|nullable|date',
-                'status'        => 'sometimes|in:actif,en_conge,suspendu,demissionne,archive,licencie',
+                'status'        => 'sometimes|in:Actif,En congé,Démissionné,Archivé,Suspendu,Licencié',
                 'societe_id'    => 'sometimes|nullable|exists:societe,id',
                 'service_id'    => 'sometimes|nullable|exists:service,id',
-                'poste'         => 'sometimes|nullable|string|max:100',
+                'profession'    => 'sometimes|nullable|string|max:100',
+                'date_naissance'      => 'sometimes|nullable|date|before:today',
+                'etat'                => 'sometimes|nullable|in:CDI,ANAPEC',
+                'salaire'             => 'sometimes|nullable|numeric|min:0',
+                'situation_familiale' => 'sometimes|nullable|in:Célibataire,Marié(e),Divorcé(e),Veuf/Veuve',
+                'nbre_enfants'        => 'sometimes|nullable|integer|min:0',
+                'banque'              => 'sometimes|nullable|string|max:255',
+                'adresse_agence'      => 'sometimes|nullable|string|max:255',
+                'rib'                 => 'sometimes|nullable|string|max:34',
+                'cin'                 => 'sometimes|nullable|string|max:20',
+                'cnss'                => 'sometimes|nullable|string|max:20',
+
             ];
         }
 
@@ -541,7 +593,7 @@ class SalarieController extends Controller
             array_key_exists('nom', $validated) ||
             array_key_exists('prenom', $validated)
         ) {
-            $salarie->refresh(); // get latest values
+            $salarie->refresh(); 
 
             $user->update([
                 'name' => trim($salarie->nom . ' ' . $salarie->prenom),

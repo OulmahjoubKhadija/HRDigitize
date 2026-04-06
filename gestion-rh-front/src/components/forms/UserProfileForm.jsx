@@ -9,10 +9,7 @@ export default function UserProfileForm() {
   const { updateUser } = useAuth();
 
   const [form, setForm] = useState({
-    cin: "",
     sexe: "",
-    adresse: "",
-    telephone: "",
     linkedin: "",
     github: "",
     cv: null,
@@ -82,64 +79,6 @@ export default function UserProfileForm() {
         
         <form onSubmit={handleSubmit} className="profile-form">
           <div className="form-grid">
-            {/* CIN */}
-            <div className="form-input-group">
-              <label htmlFor="cin" className="required-field">CIN</label>
-              <input
-                id="cin"
-                name="cin"
-                placeholder="Numéro de Carte d'Identité"
-                value={form.cin}
-                onChange={handleChange}
-                required
-              />
-              {errors.cin && <span className="form-error">{errors.cin}</span>}
-            </div>
-
-            {/* Sexe */}
-            <div className="form-input-group">
-              <label htmlFor="sexe" className="required-field">Sexe</label>
-              <select 
-                id="sexe" 
-                name="sexe" 
-                value={form.sexe} 
-                onChange={handleChange}
-                required
-              >
-                <option value="">-- Sélectionner --</option>
-                <option value="homme">Homme</option>
-                <option value="femme">Femme</option>
-              </select>
-              {errors.sexe && <span className="form-error">{errors.sexe}</span>}
-            </div>
-
-            {/* Adresse */}
-            <div className="form-input-group">
-              <label htmlFor="adresse" className="required-field">Adresse</label>
-              <input
-                id="adresse"
-                name="adresse"
-                placeholder="Adresse complète"
-                value={form.adresse}
-                onChange={handleChange}
-                required
-              />
-              {errors.adresse && <span className="form-error">{errors.adresse}</span>}
-            </div>
-
-            {/* Téléphone */}
-            <div className="form-input-group">
-              <label htmlFor="telephone" className="required-field">Téléphone</label>
-              <input
-                id="telephone"
-                name="telephone"
-                placeholder="Numéro de téléphone"
-                value={form.telephone}
-                onChange={handleChange}
-                required
-              />
-              {errors.telephone && <span className="form-error">{errors.telephone}</span>}
-            </div>
 
             {/* LinkedIn */}
             <div className="form-input-group">
@@ -164,6 +103,24 @@ export default function UserProfileForm() {
                 onChange={handleChange}
               />
             </div>
+
+            {/* Sexe */}
+            <div className="form-input-group">
+              <label htmlFor="sexe" className="required-field">Sexe</label>
+              <select 
+                id="sexe" 
+                name="sexe" 
+                value={form.sexe} 
+                onChange={handleChange}
+                required
+              >
+                <option value="">-- Sélectionner --</option>
+                <option value="Monsieur">Homme</option>
+                <option value="Madame">Femme</option>
+              </select>
+              {errors.sexe && <span className="form-error">{errors.sexe}</span>}
+            </div>
+            
           </div>
 
           {/* File Uploads */}

@@ -23,14 +23,12 @@ return new class extends Migration
     $table->string('nom');
     $table->string('prenom');
     $table->string('cin')->nullable()->unique();
-    $table->enum('sexe', ['homme', 'femme'])->nullable();
+    $table->enum('sexe', ['Monsieur', 'Madame'])->nullable()->default('Monsieur');
     $table->string('photo')->nullable();
 
     // Contact
     $table->string('email')->unique();
     $table->string('telephone')->nullable();
-    $table->string('adresse')->nullable();
-
     // Academic
     $table->string('filiere')->nullable();
 
@@ -47,11 +45,11 @@ return new class extends Migration
 
     // Stage status
     $table->enum('status', [
-        'en-stage',
-        'fin-stage',
-        'interrompu',
-        'archive'
-    ])->default('en-stage');
+        'En stage',
+        'Fin de stage',
+        'Interrompu',
+        'Archivé'
+    ])->default('En stage');
 
     // Relations
     $table->foreignId('societe_id')->references('id')->on('societe')->onDelete('cascade')->onUpdate('cascade');

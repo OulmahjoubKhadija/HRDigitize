@@ -6,10 +6,8 @@ import { useAuth } from "../../context/AuthContext";
 
 export default function InternUserForm() {
   const [formData, setFormData] = useState({
-    cin: "",
     sexe: "",
     telephone: "",
-    adresse: "",
     filiere: "",
     cv: null,
     demande_stage: null,
@@ -100,34 +98,6 @@ export default function InternUserForm() {
 
           {/* Personal Information */}
           <div className="form-grid three-columns">
-            {/* CIN */}
-            <div className="form-input-group">
-              <label htmlFor="cin" className="required-field">CIN</label>
-              <input
-                id="cin"
-                name="cin"
-                placeholder="Numéro de Carte d'Identité"
-                onChange={handleChange}
-                required
-              />
-              {errors.cin && <span className="form-error">{errors.cin}</span>}
-            </div>
-
-            {/* Sexe */}
-            <div className="form-input-group">
-              <label htmlFor="sexe" className="required-field">Sexe</label>
-              <select
-                id="sexe"
-                name="sexe"
-                onChange={handleChange}
-                required
-              >
-                <option value="">-- Sélectionner --</option>
-                <option value="femme">Femme</option>
-                <option value="homme">Homme</option>
-              </select>
-              {errors.sexe && <span className="form-error">{errors.sexe}</span>}
-            </div>
 
             {/* Téléphone */}
             <div className="form-input-group">
@@ -142,18 +112,6 @@ export default function InternUserForm() {
               {errors.telephone && <span className="form-error">{errors.telephone}</span>}
             </div>
 
-            {/* Adresse */}
-            <div className="form-input-group">
-              <label htmlFor="adresse">Adresse</label>
-              <input
-                id="adresse"
-                name="adresse"
-                placeholder="Adresse complète"
-                onChange={handleChange}
-              />
-              {errors.adresse && <span className="form-error">{errors.adresse}</span>}
-            </div>
-
             {/* Filière */}
             <div className="form-input-group">
               <label htmlFor="filiere" className="required-field">Filière</label>
@@ -166,6 +124,23 @@ export default function InternUserForm() {
               />
               {errors.filiere && <span className="form-error">{errors.filiere}</span>}
             </div>
+
+            {/* Sexe */}
+            <div className="form-input-group">
+              <label htmlFor="sexe" className="required-field">Sexe</label>
+              <select
+                id="sexe"
+                name="sexe"
+                onChange={handleChange}
+                required
+              >
+                <option value="">-- Sélectionner --</option>
+                <option value="Monsieur">Homme</option>
+                <option value="Madame">Femme</option>
+              </select>
+              {errors.sexe && <span className="form-error">{errors.sexe}</span>}
+            </div>
+
           </div>
 
           {/* File Uploads - Intern Specific */}

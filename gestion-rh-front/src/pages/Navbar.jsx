@@ -63,6 +63,11 @@ export default function Navbar() {
     { label: "Accueil", to: "/" },
     { label: "Gestion", to: "/dashboard" },
     { label: "Archives", to: "/archives" },
+    { label: "Créer un Documents", to: "/type-documents" },
+    { label: "Créer un Modél", to: "/document-templates" },
+    { label: "Demandes", to: "/demandes" },
+    { label: "Mes Demandes", to: "/mes-demandes" },
+    { label: "Generer les Documents", to: "/generate-document" },
     { label: "Créer un Employé", to: "/rh/create-employee" },
     { label: "Créer un Stagiaire", to: "/create-intern" },
     { label: "Créer une Société", to: "/rh/create-societe" },
@@ -77,6 +82,8 @@ export default function Navbar() {
     { label: "Accueil", to: "/" },
     { label: "Gestion", to: "/dashboard" },
     { label: "Créer un Stagiaire", to: "/create-intern" },
+    { label: "Mes Demandes", to: "/mes-demandes" },
+    { label: "Generer les Documents", to: "/generate-document" },
     { label: "Mon Profil", to: "/profile" },
     { label: "Déconnexion", action: logout },
   ];
@@ -90,7 +97,8 @@ export default function Navbar() {
   } else {
     links = [
       { label: "Accueil", to: "/" },
-      { label: "Mon Profil", to: "/stagiaire/profile" },
+      { label: "Mon Profil", to: "/stagiaire/profile" },  
+      { label: "Mes Demandes", to: "/mes-demandes" },
       { label: "Déconnexion", action: logout },
     ];
   }

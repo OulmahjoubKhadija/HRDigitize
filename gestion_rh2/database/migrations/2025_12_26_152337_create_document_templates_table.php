@@ -15,11 +15,13 @@ return new class extends Migration
         Schema::create('document_templates', function (Blueprint $table) {
             $table->id();
             $table->json('variable_json');
-            $table->string('template_path');
-            $table->foreignId('societe_id')->constrained('societe')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('type_document_id')->constrained('type_documents')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->json('roles_autorises');
+            $table->string('template_path')->nullable();
+            $table->foreignId('type_document_id')
+                ->constrained('type_documents')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->timestamps();
-            
         });
     }
 

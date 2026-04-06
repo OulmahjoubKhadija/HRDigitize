@@ -7,6 +7,7 @@ export default function EditStagiaireModal({ stagiaire, onClose, updateStagiaire
   const { user } = useAuth();
   const isRH = user?.role === "RH";
   const [form, setForm] = useState({
+    cin: "",
     date_debut: "",
     date_fin: "",
     status: "",
@@ -54,6 +55,7 @@ export default function EditStagiaireModal({ stagiaire, onClose, updateStagiaire
   useEffect(() => {
     if (stagiaire) {
       setForm({
+        cin: stagiaire.cin ?? "",
         date_debut: stagiaire.date_debut ?? "",
         date_fin: stagiaire.date_fin ?? "",
         status: stagiaire.status ?? "",
@@ -99,6 +101,16 @@ export default function EditStagiaireModal({ stagiaire, onClose, updateStagiaire
         <h2 className="text-xl font-bold mb-4">Modifier le stagiaire</h2>
 
         <form onSubmit={handleSubmit} className="space-y-2">
+
+          <label>CIN :</label>
+          <input
+            type="text"
+            name="cin"
+            value={form.cin || ""}
+            onChange={handleChange}
+            className="input input-bordered w-full"
+          />
+
           <label>Date début:</label>
           <input
             type="date"

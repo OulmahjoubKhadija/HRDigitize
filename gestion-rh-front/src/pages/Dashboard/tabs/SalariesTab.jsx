@@ -101,7 +101,7 @@ export default function SalarieTab() {
             <th className="p-2 border">Nom</th>
             <th className="p-2 border">Prénom</th>
             <th className="p-2 border">Rôle</th>
-            <th className="p-2 border">Poste</th>
+            <th className="p-2 border">Profession</th>
             <th className="p-2 border">Société</th>
             <th className="p-2 border">Service</th>
             <th className="p-2 border">Actions</th>
@@ -118,7 +118,7 @@ export default function SalarieTab() {
               <td className="p-2 border">{s.nom}</td>
               <td className="p-2 border">{s.prenom}</td>
               <td className="p-2 border">{s.role}</td>
-              <td className="p-2 border">{s.poste ?? "-"}</td>
+              <td className="p-2 border">{s.profession ?? "-"}</td>
               <td className="p-2 border">{s.societe?.nom ?? "-"}</td>
               <td className="p-2 border">{s.service?.nom ?? "-"}</td>
               <td className="p-2 border space-x-2">

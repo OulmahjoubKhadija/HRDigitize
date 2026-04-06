@@ -8,6 +8,7 @@ export default function InternForm() {
   const isRH = user?.role === "RH";
 
   const [formData, setFormData] = useState({
+    cin: "",
     nom: "",
     prenom: "",
     email: "",
@@ -100,6 +101,7 @@ export default function InternForm() {
     }
 
     const payload = {
+      cin: formData.cin.trim(),
       nom: formData.nom.trim(),
       prenom: formData.prenom.trim(),
       email: formData.email.trim(),
@@ -117,6 +119,7 @@ export default function InternForm() {
       console.log("CREATE STAGIAIRE RESPONSE:", response.data);
       setSuccess("Le stagiaire créé avec succès !");
       setFormData({
+        cin: "",
         nom: "",
         prenom: "",
         email: "",
@@ -164,6 +167,13 @@ export default function InternForm() {
           {success && <div className="intern-form-success">{success}</div>}
 
           <div className="intern-form-grid">
+
+            <div className="intern-input-group">
+              <label className="intern-required-field">CIN</label>
+              <input type="text" name="cin" value={formData.cin} onChange={handleChange} required />
+              {errors.cin && <span className="intern-form-error">{errors.cin}</span>}
+            </div>
+
             <div className="intern-input-group">
               <label className="intern-required-field">Nom</label>
               <input name="nom" value={formData.nom} onChange={handleChange} required />

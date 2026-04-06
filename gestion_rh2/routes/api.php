@@ -7,11 +7,14 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SocieteController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\StagiaireController;
+use App\Http\Controllers\TypeDocumentController;
+use App\Http\Controllers\DocumentTemplateController;
+use App\Http\Controllers\DemandeController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
-
+use Illuminate\Support\Facades\Log;
 // Public
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -123,5 +126,75 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/service/{id}', [ServiceController::class, 'update']);
         Route::delete('/service/{service}', [ServiceController::class, 'destroy']);
     });
-});
 
+    /*
+    |--------------------------------------------------------------------------
+    | DEMANDES
+    |--------------------------------------------------------------------------
+    */
+
+    // List my demandes
+    Route::get('/demandes', [DemandeController::class, 'index']);
+
+    // Create demande (generate document)
+    Route::post('/demandes', [DemandeController::class, 'store']);
+
+    // Download generated document
+    Route::get('/demandes/{id}/download', [DemandeController::class, 'download']);
+
+    // RH validates demande
+    Route::patch('/demandes/{id}', 
+        [DemandeController::class, 'update']
+    )->middleware('role:RH');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DOCUMENT TEMPLATES
+    |--------------------------------------------------------------------------
+    */
+
+    // List templates
+    Route::get('/document-templates', 
+        [DocumentTemplateController::class, 'index']
+    );
+
+    // Store templates
+    Route::post('/document-templates', 
+    [DocumentTemplateController::class, 'store']
+    )->middleware('role:RH');
+
+    // Update template (only RH)
+    Route::put('/document-templates/{id}', 
+        [DocumentTemplateController::class, 'update']
+    )->middleware('role:RH');
+
+    // Delete template (only RH)
+    Route::delete('/document-templates/{id}', 
+        [DocumentTemplateController::class, 'destroy']
+    )->middleware('role:RH');
+    
+    /*
+    |--------------------------------------------------------------------------
+    | TYPE DOCUMENTS
+    |--------------------------------------------------------------------------
+    */
+
+    // List document types
+    Route::get('/type-documents', 
+        [TypeDocumentController::class, 'index']
+    );
+
+    // Create document type (only RH)
+    Route::post('/type-documents', 
+        [TypeDocumentController::class, 'store']
+    )->middleware('role:RH');
+
+    // Update type document
+    Route::put('/type-documents/{id}', [TypeDocumentController::class, 'update'])
+     ->middleware('role:RH');
+
+    // Delete
+    Route::delete('/type-documents/{id}', [TypeDocumentController::class, 'destroy'])
+     ->middleware('role:RH');
+});

@@ -30,6 +30,7 @@ class StagiaireController extends Controller
             | 1. Validation
             =============================== */
             $rules = [
+                'cin' => 'required|string|max:20',
                 'nom' => 'required|string',
                 'prenom' => 'required|string',
                 'email' => 'required|email|unique:users,email',
@@ -37,7 +38,7 @@ class StagiaireController extends Controller
                 'service_id' => 'required|exists:service,id',
                 'date_debut' => 'nullable|date',
                 'date_fin' => 'nullable|date',
-                'status' => 'nullable|in:en-stage,fin-stage,interrompu,archive',
+                'status' => 'nullable|in:En stage,Fin de stage,Interrompu,Archivé',
             ];
 
             // RH must explicitly choose encadrant
@@ -97,7 +98,7 @@ class StagiaireController extends Controller
             =============================== */
             $stagiaire = Stagiaire::create([
                 'user_id' => $stagiaireUser->id,
-
+                'cin'=> $validated['cin'],
                 'nom' => $validated['nom'],
                 'prenom' => $validated['prenom'],
                 'email' => $validated['email'],
@@ -108,7 +109,7 @@ class StagiaireController extends Controller
 
                 'date_debut' => $validated['date_debut'] ?? null,
                 'date_fin' => $validated['date_fin'] ?? null,
-                'status' => $validated['status'] ?? 'en-stage',
+                'status' => $validated['status'] ?? 'En stage',
             ]);
 
 
@@ -153,11 +154,12 @@ class StagiaireController extends Controller
         $authUser = $request->user();
 
         $rules = [
-            'date_debut' => 'nullable|date',
-            'date_fin' => 'nullable|date',
-            'status' => 'nullable|in:en-stage,fin-stage,interrompu,archive',
-            'societe_id' => 'nullable|exists:societe,id',
-            'service_id' => 'nullable|exists:service,id',
+            'cin'   => 'sometimes|nullable|string|max:20',
+            'date_debut' => 'sometimes|nullable|date',
+            'date_fin' => 'sometimes|nullable|date',
+            'status' => 'sometimes|nullable|in:En stage,Fin de stage,Interrompu,Archivé',
+            'societe_id' => 'sometimes|nullable|exists:societe,id',
+            'service_id' => 'sometimes|nullable|exists:service,id',
         ];
 
         if ($authUser->role === 'RH') {
@@ -366,7 +368,7 @@ class StagiaireController extends Controller
         $this->authorize('update', $stagiaire);
 
         $request->validate([
-            'status' => 'required|in:fin-stage,interrompu,archive',
+            'status' => 'required|in:Fin de stage,Interrompu,Archivé',
         ]);
 
         $stagiaire->update([
@@ -384,7 +386,8 @@ class StagiaireController extends Controller
     /* =====================================================
      |  COMPLETE PROFILE (STAGIAIRE)
      ===================================================== */
-    public function completeProfile(Request $request) { 
+    public function completeProfile(Request $request)
+    { 
         $user = $request->user(); 
         if ($user->role !== 'STAGIAIRE') { 
             return response()->json(['message' => 'Accès refusé'], 403); 
@@ -395,10 +398,9 @@ class StagiaireController extends Controller
             $this->authorize('update', $stagiaire);
 
             $validated = $request->validate([
-                 'cin' => 'required|string|unique:stagiaire,cin,' . $stagiaire->id, 
-                 'sexe' => 'required|in:homme,femme', 
+                //  'cin' => 'required|string|unique:stagiaire,cin,' . $stagiaire->id, 
+                 'sexe' => 'required|in:Monsieur,Madame', 
                  'telephone' => 'required|string', 
-                 'adresse' => 'nullable|string', 
                  'filiere' => 'required|string', 
                  'cv' => 'nullable|file|mimes:pdf,doc,docx|max:2048', 
                  'demande_stage' => 'nullable|file|mimes:pdf,doc,docx|max:2048', 
@@ -412,7 +414,8 @@ class StagiaireController extends Controller
                     if ($request->hasFile($field)) { $validated[$field] = $request->file($field)->store('stagiaires/' . $user->id, 'public'); } 
                     } $stagiaire->update($validated); 
                     $user->update(['is_profile_completed' => true]); 
-                    return new StagiaireResource($stagiaire); }
+                    return new StagiaireResource($stagiaire); 
+    }
 
     /* =====================================================
      |  SHOW AUTHENTICATED STAGIAIRE PROFILE
@@ -450,13 +453,12 @@ class StagiaireController extends Controller
         $this->authorize('update', $stagiaire);
 
         $validated = $request->validate([
-            'cin' => 'sometimes|nullable|string|unique:stagiaire,cin,' . $stagiaire->id,
-            'sexe' => 'sometimes|nullable|in:homme,femme',
+            // 'cin' => 'sometimes|nullable|string|unique:stagiaire,cin,' . $stagiaire->id,
+            'sexe' => 'sometimes|nullable|in:Monsieur,Madame',
             'nom' => 'sometimes|nullable|string',
             'prenom' => 'sometimes|nullable|string',
             'email' => 'sometimes|nullable|email|unique:users,email,' . $user->id,
             'telephone' => 'sometimes|nullable|string',
-            'adresse' => 'sometimes|nullable|string',
             'filiere' => 'sometimes|nullable|string',
             'cv' => 'sometimes|nullable|file|mimes:pdf,doc,docx|max:2048',
             'demande_stage' => 'sometimes|nullable|file|mimes:pdf,doc,docx|max:2048',

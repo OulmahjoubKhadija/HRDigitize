@@ -15,30 +15,21 @@ return new class extends Migration
         Schema::create('demandes', function (Blueprint $table) {
             $table->id();
 
-            // Demandeur (Salarie OR Stagiaire)
-            $table->unsignedBigInteger('demandeur_id');
-            $table->string('demandeur_type');
-
-            // Type de document demandé
             $table->foreignId('type_document_id')->constrained('type_documents')->cascadeOnDelete();
-
-            // Personne concernnée par le document
-            $table->unsignedBigInteger('cible_id');
-            $table->string('cible_type');
             
-            $table->enum('status', ['en-attente', 'approuvee', 'refusee'])->default('en-attente');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            
+            $table->json('variables_json');
 
-            $table->enum('format', ['pdf','docx'])->default('pdf');
+            $table->string('file_path')->nullable();
+
+            $table->enum('status', ['en_attente', 'approuvee', 'refusee'])->default('en_attente');
 
             $table->date('date_demande');
             $table->date('date_validation')->nullable();
             $table->text('commentaire_rh')->nullable();
 
             $table->timestamps();
-
-            // Indexes for performance
-            $table->index(['demandeur_id', 'demandeur_type']);
-            $table->index(['cible_id', 'cible_type']);
 
         });
     }
